@@ -131,6 +131,10 @@ static interval arithmetic(int opcode, const interval& x, const interval& y)
             return x << y;
         case kARsh:
             return x >> y;
+        case kLRsh:
+            // Logical right shift: same as the arithmetic one on non-negative
+            // values; conservative 32-bit range when x can be negative.
+            return (x.lo() >= 0) ? (x >> y) : interval(0, 4294967295.0);
         case kGT:
             return gAlgebra.Gt(x, y);
         case kLT:
